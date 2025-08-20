@@ -1,8 +1,11 @@
 // Color variables
-$primary: #3498db;
-$secondary: #2ecc71;
-$text-color: #333;
+$primary: #333;
+$secondary: #10b981;
+$text-color: $primary;
 $text-secondary-color: #666;
+
+$card-background: #ffffff;
+$card-border: #e1e5e9;
 
 // Additional theme variables
 $background-color: #ffffff;

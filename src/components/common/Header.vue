@@ -5,20 +5,24 @@
       <p>Manage your projects efficiently</p>
     </div>
     <div class="actions">
-      <select name="period" id="period-select" v-model="selectedPeriod">
-        <option value="daily">7 Days</option>
-        <option value="weekly">30 Days</option>
-        <option value="monthly">90 Days</option>
-      </select>
-      <button class="start-simulation btn btn-primary">Action</button>
+      <Select v-model="selectedPeriod" :options="periodOptions" name="period" id="period-select" />
+      <Button>Avvia Simulazione</Button>
     </div>
   </header>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import Button from '@/components/ui/Button.vue'
+import Select from '@/components/ui/Select.vue'
 
-const selectedPeriod = ref('daily')
+const selectedPeriod = ref('weekly')
+
+const periodOptions = [
+  { value: 'daily', label: '7 giorni' },
+  { value: 'weekly', label: '30 giorni' },
+  { value: 'monthly', label: '90 giorni' },
+]
 </script>
 <style lang="scss" scoped>
 header {
@@ -50,12 +54,6 @@ header {
     display: flex;
     align-items: center;
     gap: $spacing-md;
-  }
-
-  @include responsive(mobile) {
-    flex-direction: column;
-    gap: $spacing-md;
-    text-align: center;
   }
 }
 </style>

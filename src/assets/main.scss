@@ -1,3 +1,15 @@
 @forward 'theme';
+@forward 'typography';
+@forward 'badge';
 
-@use 'base';
+@use 'typography';
+@use 'badge';
+@use 'theme' as *;
+
+section {
+  margin: 0 2rem;
+  margin-bottom: $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}

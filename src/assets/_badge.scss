@@ -1,0 +1,23 @@
+@use 'theme' as *;
+
+$badge-background-color: #f3f4f6;
+$badge-text-color: $text-color;
+
+$badge-primary-background-color: $primary;
+$badge-primary-text-color: white;
+
+$badge-success-background-color: #10b981;
+$badge-success-text-color: white;
+$badge-success-border-color: #10b981;
+
+$badge-warning-background-color: #f59e0b;
+$badge-warning-text-color: white;
+$badge-warning-border-color: #f59e0b;
+
+$badge-danger-background-color: #ef4444;
+$badge-danger-text-color: white;
+$badge-danger-border-color: #ef4444;
+
+$badge-info-background-color: #8b5cf6;
+$badge-info-text-color: white;
+$badge-info-border-color: #8b5cf6;
