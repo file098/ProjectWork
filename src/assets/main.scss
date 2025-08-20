@@ -11,5 +11,12 @@ section {
   margin-bottom: $spacing-xl;
   display: flex;
   flex-direction: column;
-  gap: $spacing-lg;
+  gap: 3rem;
+}
+
+@media (max-width: 768px) {
+  section {
+    margin: 0 1rem;
+    margin-bottom: $spacing-lg;
+  }
 }

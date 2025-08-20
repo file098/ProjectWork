@@ -21,6 +21,7 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .card {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: $spacing-sm;

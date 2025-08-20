@@ -29,9 +29,11 @@ header {
   padding: $spacing-md;
   display: flex;
   flex-flow: row;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   background-color: $background-color;
+  gap: $spacing-md;
 
   .title-container {
     display: flex;
