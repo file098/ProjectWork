@@ -2,27 +2,27 @@
   <div class="switcher">
     <div
       class="option"
-      :class="{ active: activeOption === 'Dati Ambientali' }"
-      @click="switchOption('Dati Ambientali')"
+      :class="{ active: activeOption === 'Environmental Data' }"
+      @click="switchOption('Environmental Data')"
     >
-      <span class="full-text">Dati Ambientali</span>
-      <span class="short-text">Dati</span>
+      <span class="full-text">Environmental Data</span>
+      <span class="short-text">Env.</span>
     </div>
     <div
       class="option"
-      :class="{ active: activeOption === 'Produzione' }"
-      @click="switchOption('Produzione')"
+      :class="{ active: activeOption === 'Production' }"
+      @click="switchOption('Production')"
     >
-      <span class="full-text">Produzione</span>
+      <span class="full-text">Production</span>
       <span class="short-text">Prod.</span>
     </div>
     <div
       class="option"
-      :class="{ active: activeOption === 'Performance Finanziaria' }"
-      @click="switchOption('Performance Finanziaria')"
+      :class="{ active: activeOption === 'Financial Performance' }"
+      @click="switchOption('Financial Performance')"
     >
-      <span class="full-text">Performance Finanziaria</span>
-      <span class="short-text">Perf.</span>
+      <span class="full-text">Financial Performance</span>
+      <span class="short-text">Finance</span>
     </div>
   </div>
 </template>
@@ -32,7 +32,7 @@ import { ref } from 'vue'
 
 const emit = defineEmits(['option-changed'])
 
-const activeOption = ref('Dati Ambientali')
+const activeOption = ref('Environmental Data')
 
 function switchOption(option) {
   if (option !== activeOption.value) {

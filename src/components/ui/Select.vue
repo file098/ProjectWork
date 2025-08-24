@@ -54,6 +54,9 @@ const getOptionLabel = (option) => {
     daily: '7 Days',
     weekly: '30 Days',
     monthly: '90 Days',
+    7: '7 Days',
+    30: '30 Days',
+    90: '90 Days',
   }
   return labelMap[option] || option
 }

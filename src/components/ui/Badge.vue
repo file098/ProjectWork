@@ -21,9 +21,9 @@ const props = defineProps({
 
 const computedValue = computed(() => {
   const stateTextMap = {
-    good: 'Good',
-    average: 'Average',
-    bad: 'Bad',
+    good: 'Excellent',
+    average: 'Fair',
+    bad: 'Poor',
   }
 
   return stateTextMap[computedState.value] || computedState.value

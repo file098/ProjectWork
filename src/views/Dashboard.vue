@@ -12,19 +12,19 @@
       <SmallCard
         title="Latest Harvest Quantity"
         :icon="GraphUp"
-        :value="latestQuantitaRaccolto"
+        :value="latestHarvestQuantity"
         state="good"
       />
       <SmallCard
         title="Latest Production Costs"
         :icon="GraphUp"
-        :value="latestCostiProduzione"
+        :value="latestProductionCosts"
         state="average"
       />
       <SmallCard
         title="Latest Sustainability"
         :icon="Globe"
-        :value="latestSostenibilita"
+        :value="latestSustainability"
         state="bad"
       />
     </div>
@@ -45,7 +45,7 @@ import { useEngine } from '@/composables/useEngine'
 import { GraphUp, Globe } from '@iconoir/vue'
 import { computed, ref } from 'vue'
 
-const activeOption = ref('Dati Ambientali')
+const activeOption = ref('Environmental Data')
 const engine = useEngine()
 const dataset = ref([])
 
@@ -57,28 +57,28 @@ const latestData = computed(() => {
 })
 
 const latestTemperature = computed(() => {
-  return latestData.value?.temperatura?.toFixed() || '0'
+  return latestData.value?.temperature?.toFixed() || '0'
 })
 
-const latestQuantitaRaccolto = computed(() => {
-  return latestData.value?.quantitaRaccolto?.toFixed() || '0'
+const latestHarvestQuantity = computed(() => {
+  return latestData.value?.harvestQuantity?.toFixed() || '0'
 })
 
-const latestCostiProduzione = computed(() => {
-  return latestData.value?.costiProduzione?.toFixed() || '0'
+const latestProductionCosts = computed(() => {
+  return latestData.value?.productionCosts?.toFixed() || '0'
 })
 
-const latestSostenibilita = computed(() => {
-  return latestData.value?.sostenibilita?.toFixed() || '0'
+const latestSustainability = computed(() => {
+  return latestData.value?.sustainability?.toFixed() || '0'
 })
 
 const activeComponent = computed(() => {
   switch (activeOption.value) {
-    case 'Dati Ambientali':
+    case 'Environmental Data':
       return Climate
-    case 'Produzione':
+    case 'Production':
       return Production
-    case 'Performance Finanziaria':
+    case 'Financial Performance':
       return Performance
     default:
       return Climate

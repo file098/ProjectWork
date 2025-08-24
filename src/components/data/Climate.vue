@@ -3,20 +3,16 @@
     <Card title="Team Climate" :icon="Globe" :subtitle="'This is a test subtitle'">
       <Line :data="chartData" :options="chartOptions" />
     </Card>
-    <Card
-      title="Condizioni del suolo"
-      :icon="Leaf"
-      :subtitle="'Stato attuale dei parametri del suolo'"
-    >
+    <Card title="Soil Conditions" :icon="Leaf" :subtitle="'Current status of soil parameters'">
       <div class="soil-conditions">
-        <ProgressBar label="Umidità" :value="currentClimateData.soilHumidity" unit="%" />
+        <ProgressBar label="Humidity" :value="currentClimateData.soilHumidity" unit="%" />
         <ProgressBar
-          label="Temperatura"
+          label="Temperature"
           :value="currentClimateData.soilTemperature"
           unit="°C"
           :max="50"
         />
-        <ProgressBar label="pH" :value="currentClimateData.soilPH" :max="14" />
+        <ProgressBar label="pH Level" :value="currentClimateData.soilPH" :max="14" />
       </div>
       <div class="stats">
         <StatCard
@@ -90,8 +86,8 @@ const chartData = computed(() => {
 
   // Use actual dataset data
   const labels = props.dataset.map((item, index) => `Day ${index + 1}`)
-  const temperatures = props.dataset.map((item) => Math.round(item.temperatura * 10) / 10)
-  const humidity = props.dataset.map((item) => Math.round(item.umidita * 10) / 10)
+  const temperatures = props.dataset.map((item) => Math.round(item.temperature * 10) / 10)
+  const humidity = props.dataset.map((item) => Math.round(item.humidity * 10) / 10)
 
   return {
     labels,
@@ -128,10 +124,10 @@ const currentClimateData = computed(() => {
 
   const latest = props.dataset[props.dataset.length - 1]
   return {
-    temperature: Math.round(latest.temperatura * 10) / 10,
-    humidity: Math.round(latest.umidita),
+    temperature: Math.round(latest.temperature * 10) / 10,
+    humidity: Math.round(latest.humidity),
     soilHumidity: 75, // Default value as not in dataset
-    soilTemperature: Math.round((latest.temperatura - 2) * 10) / 10, // Soil temp is typically lower
+    soilTemperature: Math.round((latest.temperature - 2) * 10) / 10, // Soil temp is typically lower
     soilPH: 6.5, // Default value as not in dataset
   }
 })

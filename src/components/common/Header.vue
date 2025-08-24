@@ -6,7 +6,7 @@
     </div>
     <div class="actions">
       <Select v-model="selectedPeriod" :options="periodOptions" name="period" id="period-select" />
-      <Button @click="startSimulation">Avvia Simulazione</Button>
+      <Button @click="startSimulation">Start Simulation</Button>
     </div>
   </header>
 </template>
@@ -21,9 +21,9 @@ const emit = defineEmits(['start-simulation'])
 const selectedPeriod = ref('7')
 
 const periodOptions = [
-  { value: '7', label: '7 giorni' },
-  { value: '30', label: '30 giorni' },
-  { value: '90', label: '90 giorni' },
+  { value: '7', label: '7 days' },
+  { value: '30', label: '30 days' },
+  { value: '90', label: '90 days' },
 ]
 
 const startSimulation = () => {
