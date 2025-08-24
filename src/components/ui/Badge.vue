@@ -1,6 +1,6 @@
 <template>
   <div :class="['badge', `badge--${computedState}`]">
-    {{ displayValue }}
+    {{ computedValue }}
   </div>
 </template>
 
@@ -8,60 +8,36 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  value: {
-    type: [String, Number],
-    required: true,
+  state: {
+    type: String,
+    default: 'default',
+    validator: (value) => ['good', 'average', 'bad'].includes(value),
   },
   transformer: {
     type: Function,
     default: null,
   },
-  state: {
-    type: String,
-    default: 'default',
-    validator: (value) =>
-      ['default', 'primary', 'success', 'warning', 'danger', 'info'].includes(value),
-  },
 })
 
-const displayValue = computed(() => {
-  if (props.transformer && typeof props.transformer === 'function') {
-    return props.transformer(props.value)
+const computedValue = computed(() => {
+  const stateTextMap = {
+    good: 'Good',
+    average: 'Average',
+    bad: 'Bad',
   }
-  return props.value
+
+  return stateTextMap[computedState.value] || computedState.value
 })
 
 const computedState = computed(() => {
-  // If transformer function returns an object with state, use that
-  if (props.transformer && typeof props.transformer === 'function') {
-    const result = props.transformer(props.value)
-    if (typeof result === 'object' && result.state) {
-      return result.state
-    }
+  // Map legacy states to new good/average/bad states
+  const stateMapping = {
+    success: 'good',
+    warning: 'average',
+    danger: 'bad',
   }
 
-  // Auto-determine state based on value type and content
-  if (typeof props.value === 'number') {
-    if (props.value >= 8) return 'success'
-    if (props.value >= 6) return 'warning'
-    if (props.value < 4) return 'danger'
-    return 'primary'
-  }
-
-  if (typeof props.value === 'string') {
-    if (props.value.includes('%')) {
-      const numValue = parseFloat(props.value)
-      if (numValue >= 80) return 'success'
-      if (numValue >= 50) return 'warning'
-      if (numValue < 20) return 'danger'
-      return 'primary'
-    }
-    if (props.value.includes('giorni') || props.value.includes('days')) {
-      return 'info'
-    }
-  }
-
-  return props.state
+  return stateMapping[props.state] || props.state
 })
 </script>
 
@@ -78,13 +54,10 @@ const computedState = computed(() => {
   transition: all 0.2s ease-in-out;
   white-space: nowrap;
 
-  // Hover effects
   &:hover {
-    transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
   }
 
-  // State variations - Solid (default)
   &--default {
     background-color: $badge-background-color;
     color: $badge-text-color;
@@ -113,6 +86,21 @@ const computedState = computed(() => {
   &--info {
     background-color: $badge-info-background-color;
     color: $badge-info-text-color;
+  }
+
+  &--good {
+    background-color: $badge-good-background-color;
+    color: $badge-good-text-color;
+  }
+
+  &--average {
+    background-color: $badge-average-background-color;
+    color: $badge-average-text-color;
+  }
+
+  &--bad {
+    background-color: $badge-bad-background-color;
+    color: $badge-bad-text-color;
   }
 }
 </style>

@@ -21,3 +21,16 @@ $badge-danger-border-color: $danger;
 $badge-info-background-color: $info;
 $badge-info-text-color: white;
 $badge-info-border-color: $info;
+
+// Good, Average, Bad states
+$badge-good-background-color: $success;
+$badge-good-text-color: white;
+$badge-good-border-color: $success;
+
+$badge-average-background-color: $warning;
+$badge-average-text-color: white;
+$badge-average-border-color: $warning;
+
+$badge-bad-background-color: $danger;
+$badge-bad-text-color: white;
+$badge-bad-border-color: $danger;

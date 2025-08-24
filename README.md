@@ -273,3 +273,71 @@ function randomInRange(min: number, max: number): number {
   return Math.random() * (max - min) + min
 }
 ```
+
+# Claude Data Structure
+
+```ts
+// Enums essenziali
+export enum Stagione {
+  PRIMAVERA = 'primavera',
+  ESTATE = 'estate',
+  AUTUNNO = 'autunno',
+  INVERNO = 'inverno',
+}
+
+export enum TipoColtivazione {
+  CEREALI = 'cereali',
+  ORTAGGI = 'ortaggi',
+  FRUTTA = 'frutta',
+}
+
+// Struttura dati semplificata
+export interface DatiAzienda {
+  // Identificazione
+  id: string
+  data: Date
+  azienda: string
+
+  // Dati Ambientali (4 valori chiave)
+  temperatura: number // °C media giornaliera
+  umidita: number // %
+  precipitazioni: number // mm
+  oreSole: number // ore
+
+  // Dati Produzione (4 valori chiave)
+  quantitaRaccolto: number // kg
+  superficieColtivata: number // ettari
+  qualitaProdotto: number // scala 1-10
+  tipoColtivazione: TipoColtivazione
+
+  // Dati Economici (3 valori chiave)
+  costiProduzione: number // €
+  ricavi: number // €
+  margineProfitto: number // %
+
+  // Gestione Risorse (3 valori chiave)
+  consumoAcqua: number // litri
+  consumoCarburante: number // litri
+  oreLavoro: number // ore
+
+  // KPI (2 valori chiave)
+  efficienzaProduttiva: number // kg/ettaro
+  sostenibilita: number // indice 1-10
+
+  // Contesto
+  stagione: Stagione
+}
+
+// Array per il dataset
+export type DatasetAzienda = DatiAzienda[]
+
+// Interfaccia per statistiche aggregate (opzionale)
+export interface StatistichePeriodo {
+  dataInizio: Date
+  dataFine: Date
+  mediaTemperatura: number
+  totalePrecipitazioni: number
+  produzioneTotale: number
+  ricaviTotali: number
+}
+```

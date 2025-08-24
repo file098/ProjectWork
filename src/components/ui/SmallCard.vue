@@ -6,7 +6,7 @@
     </div>
     <div class="small-card-content">
       <p class="value">{{ value }}</p>
-      <Badge :value="'Good'" />
+      <Badge :state="state" />
     </div>
   </div>
 </template>
@@ -18,12 +18,14 @@ import Badge from '@/components/ui/Badge.vue'
 const props = defineProps({
   title: String,
   icon: [String, Object],
-  value: String,
-  status: String,
-  statusType: {
+  state: {
     type: String,
-    values: ['default', 'badge'],
-    default: 'default',
+    default: 'good',
+    validator: (value) => ['good', 'average', 'bad'].includes(value),
+  },
+  value: {
+    type: String,
+    default: '0',
   },
 })
 </script>

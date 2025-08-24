@@ -1,5 +1,5 @@
 <template>
-  <div class="climate-container">
+  <div class="content">
     <Card title="Team Climate" :icon="Globe" :subtitle="'This is a test subtitle'">
       <Line :data="chartData" :options="chartOptions" />
     </Card>
@@ -9,13 +9,28 @@
       :subtitle="'Stato attuale dei parametri del suolo'"
     >
       <div class="soil-conditions">
-        <ProgressBar label="Umidità" :value="75" unit="%" />
-        <ProgressBar label="Temperatura" :value="20.5" unit="°C" :max="50" />
-        <ProgressBar label="pH" :value="6.5" :max="14" />
+        <ProgressBar label="Umidità" :value="currentClimateData.soilHumidity" unit="%" />
+        <ProgressBar
+          label="Temperatura"
+          :value="currentClimateData.soilTemperature"
+          unit="°C"
+          :max="50"
+        />
+        <ProgressBar label="pH" :value="currentClimateData.soilPH" :max="14" />
       </div>
       <div class="stats">
-        <StatCard title="Temperature" :value="22.5" :icon="'globe'" color="lightblue" />
-        <StatCard title="Humidity" :value="60" :icon="'globe'" color="lightgreen" />
+        <StatCard
+          title="Temperature"
+          :value="currentClimateData.temperature"
+          :icon="'globe'"
+          color="lightblue"
+        />
+        <StatCard
+          title="Humidity"
+          :value="currentClimateData.humidity"
+          :icon="'globe'"
+          color="lightgreen"
+        />
       </div>
     </Card>
   </div>
@@ -23,43 +38,104 @@
 
 <script setup>
 import { Card, ProgressBar } from '@/components/ui'
-import { Globe, Leaf } from '@iconoir/vue'
 import StatCard from '@/components/ui/StatCard.vue'
-import { Line } from 'vue-chartjs'
+import { Globe, Leaf } from '@iconoir/vue'
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
 } from 'chart.js'
+import { computed } from 'vue'
+import { Line } from 'vue-chartjs'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
-const chartData = {
-  labels: ['January', 'February', 'March', 'April', 'May'],
-  datasets: [
-    {
-      label: 'Temperature',
-      data: [15, 20, 25, 30, 35],
-      borderColor: '#42A5F5',
-      backgroundColor: 'rgba(66, 165, 245, 0.1)',
-      fill: false,
-    },
-    {
-      label: 'Humidity',
-      data: [30, 40, 50, 60, 70],
-      borderColor: '#66BB6A',
-      backgroundColor: 'rgba(102, 187, 106, 0.1)',
-      fill: false,
-    },
-  ],
-}
+const props = defineProps({
+  dataset: {
+    type: Object,
+    required: false,
+    default: () => null,
+  },
+})
 
-// Chart options
+// Computed chart data that uses the dataset when available
+const chartData = computed(() => {
+  if (!props.dataset || !Array.isArray(props.dataset) || props.dataset.length === 0) {
+    // Default data when no dataset is provided
+    return {
+      labels: ['January', 'February', 'March', 'April', 'May'],
+      datasets: [
+        {
+          label: 'Temperature',
+          data: [15, 20, 25, 30, 35],
+          borderColor: '#42A5F5',
+          backgroundColor: 'rgba(66, 165, 245, 0.1)',
+          fill: false,
+        },
+        {
+          label: 'Humidity',
+          data: [30, 40, 50, 60, 70],
+          borderColor: '#66BB6A',
+          backgroundColor: 'rgba(102, 187, 106, 0.1)',
+          fill: false,
+        },
+      ],
+    }
+  }
+
+  // Use actual dataset data
+  const labels = props.dataset.map((item, index) => `Day ${index + 1}`)
+  const temperatures = props.dataset.map((item) => Math.round(item.temperatura * 10) / 10)
+  const humidity = props.dataset.map((item) => Math.round(item.umidita * 10) / 10)
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: 'Temperature (°C)',
+        data: temperatures,
+        borderColor: '#42A5F5',
+        backgroundColor: 'rgba(66, 165, 245, 0.1)',
+        fill: false,
+      },
+      {
+        label: 'Humidity (%)',
+        data: humidity,
+        borderColor: '#66BB6A',
+        backgroundColor: 'rgba(102, 187, 106, 0.1)',
+        fill: false,
+      },
+    ],
+  }
+})
+
+// Computed values for current climate data
+const currentClimateData = computed(() => {
+  if (!props.dataset || !Array.isArray(props.dataset) || props.dataset.length === 0) {
+    return {
+      temperature: 22.5,
+      humidity: 60,
+      soilHumidity: 75,
+      soilTemperature: 20.5,
+      soilPH: 6.5,
+    }
+  }
+
+  const latest = props.dataset[props.dataset.length - 1]
+  return {
+    temperature: Math.round(latest.temperatura * 10) / 10,
+    humidity: Math.round(latest.umidita),
+    soilHumidity: 75, // Default value as not in dataset
+    soilTemperature: Math.round((latest.temperatura - 2) * 10) / 10, // Soil temp is typically lower
+    soilPH: 6.5, // Default value as not in dataset
+  }
+})
+
 const chartOptions = {
   responsive: true,
   plugins: {
@@ -80,14 +156,6 @@ const chartOptions = {
 </script>
 
 <style lang="scss" scoped>
-.climate-container {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: $spacing-md;
-}
-
 .soil-conditions {
   display: flex;
   flex-direction: column;

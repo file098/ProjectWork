@@ -6,24 +6,33 @@
     </div>
     <div class="actions">
       <Select v-model="selectedPeriod" :options="periodOptions" name="period" id="period-select" />
-      <Button>Avvia Simulazione</Button>
+      <Button @click="startSimulation">Avvia Simulazione</Button>
     </div>
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import Button from '@/components/ui/Button.vue'
 import Select from '@/components/ui/Select.vue'
+import { ref } from 'vue'
 
-const selectedPeriod = ref('weekly')
+const emit = defineEmits(['start-simulation'])
+
+const selectedPeriod = ref('7')
 
 const periodOptions = [
-  { value: 'daily', label: '7 giorni' },
-  { value: 'weekly', label: '30 giorni' },
-  { value: 'monthly', label: '90 giorni' },
+  { value: '7', label: '7 giorni' },
+  { value: '30', label: '30 giorni' },
+  { value: '90', label: '90 giorni' },
 ]
+
+const startSimulation = () => {
+  emit('start-simulation', selectedPeriod.value)
+}
+
+startSimulation()
 </script>
+
 <style lang="scss" scoped>
 header {
   padding: $spacing-md;

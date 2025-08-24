@@ -20,3 +20,21 @@ section {
     margin-bottom: $spacing-lg;
   }
 }
+
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: $spacing-md;
+
+  &.different-sizes {
+    & > :first-child {
+      flex: 2;
+    }
+
+    & > :nth-child(2) {
+      flex: 1;
+    }
+  }
+}
