@@ -2,7 +2,7 @@
   <div class="switcher">
     <div
       class="option"
-      :class="{ active: activeOption === 'Environmental Data' }"
+      :class="{ active: modelValue === 'Environmental Data' }"
       @click="switchOption('Environmental Data')"
     >
       <span class="full-text">Environmental Data</span>
@@ -10,7 +10,7 @@
     </div>
     <div
       class="option"
-      :class="{ active: activeOption === 'Production' }"
+      :class="{ active: modelValue === 'Production' }"
       @click="switchOption('Production')"
     >
       <span class="full-text">Production</span>
@@ -18,7 +18,7 @@
     </div>
     <div
       class="option"
-      :class="{ active: activeOption === 'Financial Performance' }"
+      :class="{ active: modelValue === 'Financial Performance' }"
       @click="switchOption('Financial Performance')"
     >
       <span class="full-text">Financial Performance</span>
@@ -28,16 +28,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 
-const emit = defineEmits(['option-changed'])
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: 'Environmental Data',
+  },
+})
 
-const activeOption = ref('Environmental Data')
+const emit = defineEmits(['update:modelValue'])
+
+const activeOption = computed(() => props.modelValue)
 
 function switchOption(option) {
-  if (option !== activeOption.value) {
-    activeOption.value = option
-    emit('option-changed', option)
+  if (option !== props.modelValue) {
+    emit('update:modelValue', option)
   }
 }
 </script>

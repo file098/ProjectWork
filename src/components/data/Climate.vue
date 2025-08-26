@@ -5,13 +5,8 @@
     </Card>
     <Card title="Soil Conditions" :icon="Leaf" :subtitle="'Current status of soil parameters'">
       <div class="soil-conditions">
-        <ProgressBar label="Humidity" :value="currentClimateData.soilHumidity" unit="%" />
-        <ProgressBar
-          label="Temperature"
-          :value="currentClimateData.soilTemperature"
-          unit="°C"
-          :max="50"
-        />
+        <ProgressBar label="Humidity" :value="currentClimateData.humidity" unit="%" />
+        <ProgressBar label="Rainfall" :value="currentClimateData.rainfall" unit="mm" :max="50" />
         <ProgressBar label="pH Level" :value="currentClimateData.soilPH" :max="14" />
       </div>
       <div class="stats">
@@ -69,15 +64,15 @@ const chartData = computed(() => {
         {
           label: 'Temperature',
           data: [15, 20, 25, 30, 35],
-          borderColor: '#42A5F5',
-          backgroundColor: 'rgba(66, 165, 245, 0.1)',
+          borderColor: '#90CAF9',
+          backgroundColor: 'rgba(144, 202, 249, 0.2)',
           fill: false,
         },
         {
           label: 'Humidity',
           data: [30, 40, 50, 60, 70],
-          borderColor: '#66BB6A',
-          backgroundColor: 'rgba(102, 187, 106, 0.1)',
+          borderColor: '#A5D6A7',
+          backgroundColor: 'rgba(165, 214, 167, 0.2)',
           fill: false,
         },
       ],
@@ -95,15 +90,15 @@ const chartData = computed(() => {
       {
         label: 'Temperature (°C)',
         data: temperatures,
-        borderColor: '#42A5F5',
-        backgroundColor: 'rgba(66, 165, 245, 0.1)',
+        borderColor: '#90CAF9',
+        backgroundColor: 'rgba(144, 202, 249, 0.2)',
         fill: false,
       },
       {
         label: 'Humidity (%)',
         data: humidity,
-        borderColor: '#66BB6A',
-        backgroundColor: 'rgba(102, 187, 106, 0.1)',
+        borderColor: '#A5D6A7',
+        backgroundColor: 'rgba(165, 214, 167, 0.2)',
         fill: false,
       },
     ],
@@ -116,9 +111,9 @@ const currentClimateData = computed(() => {
     return {
       temperature: 22.5,
       humidity: 60,
-      soilHumidity: 75,
       soilTemperature: 20.5,
       soilPH: 6.5,
+      rainfall: 5.0,
     }
   }
 
@@ -126,9 +121,9 @@ const currentClimateData = computed(() => {
   return {
     temperature: Math.round(latest.temperature * 10) / 10,
     humidity: Math.round(latest.humidity),
-    soilHumidity: 75, // Default value as not in dataset
     soilTemperature: Math.round((latest.temperature - 2) * 10) / 10, // Soil temp is typically lower
     soilPH: 6.5, // Default value as not in dataset
+    rainfall: latest.rainfall,
   }
 })
 

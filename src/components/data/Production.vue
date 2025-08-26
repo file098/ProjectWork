@@ -25,13 +25,13 @@
               title="Product Quality"
               :value="currentProductionData.productQuality + '/10'"
               :icon="'quality'"
-              color="orange"
+              color="lightyellow"
             />
             <StatCard
               title="Crop Type"
               :value="currentProductionData.cropType"
               :icon="'crop'"
-              color="green"
+              color="lightcyan"
             />
           </div>
         </div>

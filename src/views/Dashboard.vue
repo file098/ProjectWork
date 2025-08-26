@@ -4,28 +4,13 @@
   <section>
     <div class="small-cards-container">
       <SmallCard
-        title="Latest Temperature"
-        :icon="GraphUp"
-        :value="latestTemperature"
-        state="good"
-      />
-      <SmallCard
-        title="Latest Harvest Quantity"
-        :icon="GraphUp"
-        :value="latestHarvestQuantity"
-        state="good"
-      />
-      <SmallCard
-        title="Latest Production Costs"
-        :icon="GraphUp"
-        :value="latestProductionCosts"
-        state="average"
-      />
-      <SmallCard
-        title="Latest Sustainability"
-        :icon="Globe"
-        :value="latestSustainability"
-        state="bad"
+        v-for="card in farmMetrics"
+        :key="card.title"
+        :title="card.title"
+        :icon="card.icon"
+        :value="card.value"
+        :unit="card.unit"
+        :state="card.state"
       />
     </div>
     <Switcher v-model="activeOption" />
@@ -56,21 +41,64 @@ const latestData = computed(() => {
   return dataset.value[dataset.value.length - 1]
 })
 
-const latestTemperature = computed(() => {
-  return latestData.value?.temperature?.toFixed() || '0'
+const farmMetrics = computed(() => {
+  const data = latestData.value
+
+  return [
+    {
+      title: 'Latest Temperature',
+      icon: GraphUp,
+      value: data?.temperature?.toFixed() || '0',
+      unit: '°C',
+      state: getTemperatureState(data?.temperature || 0),
+    },
+    {
+      title: 'Latest Harvest Quantity',
+      icon: GraphUp,
+      value: data?.harvestQuantity?.toFixed() || '0',
+      unit: 'kg',
+      state: getHarvestState(data?.harvestQuantity || 0),
+    },
+    {
+      title: 'Latest Production Costs',
+      icon: GraphUp,
+      value: data?.productionCosts?.toFixed() || '0',
+      unit: '€',
+      state: getCostState(data?.productionCosts || 0),
+    },
+    {
+      title: 'Latest Sustainability',
+      icon: Globe,
+      value: data?.sustainability?.toFixed() || '0',
+      unit: '%',
+      state: getSustainabilityState(data?.sustainability || 0),
+    },
+  ]
 })
 
-const latestHarvestQuantity = computed(() => {
-  return latestData.value?.harvestQuantity?.toFixed() || '0'
-})
+const getTemperatureState = (temp) => {
+  if (temp >= 15 && temp <= 25) return 'good'
+  if (temp >= 10 && temp <= 30) return 'average'
+  return 'bad'
+}
 
-const latestProductionCosts = computed(() => {
-  return latestData.value?.productionCosts?.toFixed() || '0'
-})
+const getHarvestState = (quantity) => {
+  if (quantity >= 500) return 'good'
+  if (quantity >= 200) return 'average'
+  return 'bad'
+}
 
-const latestSustainability = computed(() => {
-  return latestData.value?.sustainability?.toFixed() || '0'
-})
+const getCostState = (costs) => {
+  if (costs <= 1000) return 'good'
+  if (costs <= 2000) return 'average'
+  return 'bad'
+}
+
+const getSustainabilityState = (sustainability) => {
+  if (sustainability >= 7) return 'good'
+  if (sustainability >= 4) return 'average'
+  return 'bad'
+}
 
 const activeComponent = computed(() => {
   switch (activeOption.value) {
@@ -87,14 +115,13 @@ const activeComponent = computed(() => {
 
 const handleStartSimulation = (period) => {
   dataset.value = engine.createDataset(period)
-  let currentDayOffset = period // Start from the next day after the initial dataset
+  let currentDayOffset = period
 
   setInterval(() => {
     const newData = engine.createSingleDayDataset()
     dataset.value.push(...newData)
     dataset.value.shift()
-
-    currentDayOffset++ // Increment to the next day
+    currentDayOffset++
   }, 3000)
 }
 </script>

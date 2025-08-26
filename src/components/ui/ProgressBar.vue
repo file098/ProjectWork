@@ -41,8 +41,9 @@ const props = defineProps({
 })
 
 const normalizedValue = computed(() => {
-  if (props.max) return (props.value / props.max) * 100
-  return props.value
+  const safeValue = isNaN(props.value) ? 0 : props.value || 0
+  if (props.max) return (safeValue / props.max) * 100
+  return safeValue
 })
 
 const getProgressClass = () => {

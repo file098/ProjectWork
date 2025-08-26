@@ -6,30 +6,31 @@
       :subtitle="'Revenue, costs, and profitability analysis'"
     >
       <div class="performance-overview">
+        ``
         <div class="financial-stats">
           <StatCard
             title="Total Revenue"
             :value="'€' + currentFinancialData.revenue.toLocaleString()"
             :icon="'revenue'"
-            color="green"
+            color="lightgreen"
           />
           <StatCard
             title="Production Costs"
             :value="'€' + currentFinancialData.productionCosts.toLocaleString()"
             :icon="'costs'"
-            color="red"
+            color="lightcoral"
           />
-          <StatCard
+          <!-- <StatCard
             title="Profit Margin"
             :value="currentFinancialData.profitMargin + '%'"
             :icon="'profit'"
-            :color="currentFinancialData.profitMargin > 0 ? 'green' : 'red'"
-          />
+            :color="currentFinancialData.profitMargin > 0 ? 'lightgreen' : 'lightcoral'"
+          /> -->
           <StatCard
             title="Efficiency"
             :value="currentFinancialData.efficiency + ' kg/ha'"
             :icon="'efficiency'"
-            color="blue"
+            color="lightblue"
           />
         </div>
 
@@ -58,13 +59,30 @@
         </div>
       </div>
     </Card>
+
+    <Card title="Financial Trends" icon="📈" :subtitle="'Revenue and cost analysis over time'">
+      <Line :data="chartData" :options="chartOptions" />
+    </Card>
   </div>
 </template>
 
 <script setup>
 import { Card, ProgressBar } from '@/components/ui'
 import StatCard from '@/components/ui/StatCard.vue'
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from 'chart.js'
 import { computed } from 'vue'
+import { Line } from 'vue-chartjs'
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 const props = defineProps({
   dataset: {
@@ -73,6 +91,80 @@ const props = defineProps({
     default: () => null,
   },
 })
+
+// Computed chart data that uses the dataset when available
+const chartData = computed(() => {
+  if (!props.dataset || !Array.isArray(props.dataset) || props.dataset.length === 0) {
+    // Default data when no dataset is provided
+    return {
+      labels: ['Q1', 'Q2', 'Q3', 'Q4', 'Current'],
+      datasets: [
+        {
+          label: 'Revenue (€)',
+          data: [35000, 38000, 42000, 45000, 48000],
+          borderColor: '#4CAF50',
+          backgroundColor: 'rgba(76, 175, 80, 0.2)',
+          fill: false,
+        },
+        {
+          label: 'Production Costs (€)',
+          data: [28000, 29000, 30000, 32000, 34000],
+          borderColor: '#F44336',
+          backgroundColor: 'rgba(244, 67, 54, 0.2)',
+          fill: false,
+        },
+      ],
+    }
+  }
+
+  // Use actual dataset data
+  const labels = props.dataset.map((item, index) => `Period ${index + 1}`)
+  const revenues = props.dataset.map((item) => Math.round(item.revenue))
+  const costs = props.dataset.map((item) => Math.round(item.productionCosts))
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: 'Revenue (€)',
+        data: revenues,
+        borderColor: '#4CAF50',
+        backgroundColor: 'rgba(76, 175, 80, 0.2)',
+        fill: false,
+      },
+      {
+        label: 'Production Costs (€)',
+        data: costs,
+        borderColor: '#F44336',
+        backgroundColor: 'rgba(244, 67, 54, 0.2)',
+        fill: false,
+      },
+    ],
+  }
+})
+
+const chartOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: true,
+      text: 'Financial Performance Over Time',
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      ticks: {
+        callback: function (value) {
+          return '€' + value.toLocaleString()
+        },
+      },
+    },
+  },
+}
 
 // Computed values for current financial performance data
 const currentFinancialData = computed(() => {

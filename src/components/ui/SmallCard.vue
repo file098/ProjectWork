@@ -5,7 +5,7 @@
       <component :is="icon" class="icon" v-if="icon" />
     </div>
     <div class="small-card-content">
-      <p class="value">{{ value }}</p>
+      <p class="value">{{ value }} {{ unit }}</p>
       <Badge :state="state" />
     </div>
   </div>
@@ -18,6 +18,7 @@ import Badge from '@/components/ui/Badge.vue'
 const props = defineProps({
   title: String,
   icon: [String, Object],
+  unit: String,
   state: {
     type: String,
     default: 'good',
