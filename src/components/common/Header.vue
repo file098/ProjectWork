@@ -1,12 +1,12 @@
 <template>
   <header>
-    <div class="title-container">
+    <div class="page-header">
       <h1>Project Dashboard</h1>
       <p>Manage your projects efficiently</p>
     </div>
-    <div class="actions">
-      <Select v-model="selectedPeriod" :options="periodOptions" name="period" id="period-select" />
-      <Button @click="startSimulation">Start Simulation</Button>
+    <div class="header-actions">
+      <Select v-model="timeframe" :options="timeframeOptions" name="period" id="period-select" />
+      <Button @click="initiateSimulation">Start Simulation</Button>
     </div>
   </header>
 </template>
@@ -18,19 +18,19 @@ import { ref } from 'vue'
 
 const emit = defineEmits(['start-simulation'])
 
-const selectedPeriod = ref('7')
+const timeframe = ref('7')
 
-const periodOptions = [
+const timeframeOptions = [
   { value: '7', label: '7 days' },
   { value: '30', label: '30 days' },
   { value: '90', label: '90 days' },
 ]
 
-const startSimulation = () => {
-  emit('start-simulation', selectedPeriod.value)
+const initiateSimulation = () => {
+  emit('start-simulation', timeframe.value)
 }
 
-startSimulation()
+initiateSimulation()
 </script>
 
 <style lang="scss" scoped>
@@ -44,7 +44,7 @@ header {
   background-color: $background-color;
   gap: $spacing-md;
 
-  .title-container {
+  .page-header {
     display: flex;
     flex-flow: column;
     gap: $spacing-xs;
@@ -61,7 +61,7 @@ header {
     }
   }
 
-  .actions {
+  .header-actions {
     display: flex;
     align-items: center;
     gap: $spacing-md;

@@ -2,43 +2,43 @@
   <div class="content">
     <Card
       title="Production Overview"
-      icon="🏭"
+      :icon="Reports"
       :subtitle="'Agricultural production metrics and statistics'"
     >
-      <div class="production-stats">
-        <div class="stat-group">
+      <div class="farm-stats">
+        <div class="overview-group">
           <h3>Current Production Data</h3>
-          <div class="stats-grid">
+          <div class="metrics-layout">
             <StatCard
               title="Harvest Quantity"
               :value="currentProductionData.harvestQuantity + ' kg'"
-              :icon="'harvest'"
+              :icon="Packages"
               color="lightgreen"
             />
             <StatCard
               title="Cultivated Area"
               :value="currentProductionData.cultivatedArea + ' ha'"
-              :icon="'area'"
+              :icon="Agile"
               color="lightblue"
             />
             <StatCard
               title="Product Quality"
               :value="currentProductionData.productQuality + '/10'"
-              :icon="'quality'"
+              :icon="Medal"
               color="lightyellow"
             />
             <StatCard
               title="Crop Type"
               :value="currentProductionData.cropType"
-              :icon="'crop'"
+              :icon="Leaf"
               color="lightcyan"
             />
           </div>
         </div>
 
-        <div class="stat-group">
+        <div class="overview-group">
           <h3>Resource Usage</h3>
-          <div class="resource-bars">
+          <div class="consumption-indicators">
             <ProgressBar
               label="Water Consumption"
               :value="currentProductionData.waterUsage"
@@ -68,6 +68,7 @@
 import { Card, ProgressBar } from '@/components/ui'
 import StatCard from '@/components/ui/StatCard.vue'
 import { computed } from 'vue'
+import { Reports, Packages, Agile, Medal, Leaf } from '@iconoir/vue'
 
 const props = defineProps({
   dataset: {
@@ -77,7 +78,6 @@ const props = defineProps({
   },
 })
 
-// Computed values for current production data
 const currentProductionData = computed(() => {
   if (!props.dataset || !Array.isArray(props.dataset) || props.dataset.length === 0) {
     return {
@@ -107,13 +107,13 @@ const currentProductionData = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.production-stats {
+.farm-stats {
   display: flex;
   flex-direction: column;
   gap: $spacing-lg;
 }
 
-.stat-group {
+.overview-group {
   h3 {
     margin: 0 0 $spacing-md 0;
     color: $text-color;
@@ -122,13 +122,13 @@ const currentProductionData = computed(() => {
   }
 }
 
-.stats-grid {
+.metrics-layout {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: $spacing-md;
 }
 
-.resource-bars {
+.consumption-indicators {
   display: flex;
   flex-direction: column;
   gap: $spacing-md;

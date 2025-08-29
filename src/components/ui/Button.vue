@@ -56,7 +56,6 @@ const buttonClasses = computed(() => [
     outline: none;
   }
 
-  // Variants
   &.button--primary {
     background-color: #1f2937;
     color: #ffffff;
@@ -99,7 +98,6 @@ const buttonClasses = computed(() => [
     }
   }
 
-  // Sizes
   &.button--small {
     padding: 8px 16px;
     font-size: 14px;
@@ -115,7 +113,6 @@ const buttonClasses = computed(() => [
     font-size: 16px;
   }
 
-  // Disabled state
   &.button--disabled {
     opacity: 0.6;
     cursor: not-allowed;

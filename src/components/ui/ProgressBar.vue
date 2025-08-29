@@ -1,14 +1,14 @@
 <template>
-  <div class="progress-bar">
-    <div class="progress-header">
-      <span class="progress-label">{{ label }}</span>
-      <span class="progress-value">{{ normalizedValue.toFixed() }} {{ unit }}</span>
+  <div class="progress-indicator">
+    <div class="indicator-header">
+      <span class="indicator-label">{{ label }}</span>
+      <span class="indicator-value">{{ normalizedValue.toFixed() }} {{ unit }}</span>
     </div>
-    <div class="progress-track">
+    <div class="indicator-track">
       <div
-        class="progress-fill"
+        class="indicator-fill"
         :style="{ width: `${normalizedValue}%` }"
-        :class="getProgressClass()"
+        :class="getStatusClass()"
       ></div>
     </div>
   </div>
@@ -46,49 +46,49 @@ const normalizedValue = computed(() => {
   return safeValue
 })
 
-const getProgressClass = () => {
-  if (props.colorStatus) return 'progress-fill--primary'
+const getStatusClass = () => {
+  if (props.colorStatus) return 'indicator-fill--primary'
   if (normalizedValue.value >= 66 && normalizedValue.value < 100) {
-    return 'progress-fill--success'
+    return 'indicator-fill--success'
   } else if (normalizedValue.value >= 33 && normalizedValue.value < 66) {
-    return 'progress-fill--warning'
+    return 'indicator-fill--warning'
   } else {
-    return 'progress-fill--danger'
+    return 'indicator-fill--danger'
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.progress-bar {
+.progress-indicator {
   width: 100%;
 
-  .progress-header {
+  .indicator-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: $spacing-xs;
 
-    .progress-label {
+    .indicator-label {
       font-weight: 500;
       color: $text-color;
       font-size: 0.875rem;
     }
 
-    .progress-value {
+    .indicator-value {
       font-weight: 600;
       color: $text-color;
       font-size: 0.875rem;
     }
   }
 
-  .progress-track {
+  .indicator-track {
     width: 100%;
     height: 8px;
     background-color: #e5e7eb;
     border-radius: 4px;
     overflow: hidden;
 
-    .progress-fill {
+    .indicator-fill {
       height: 100%;
       border-radius: 4px;
       transition: width 0.3s ease;

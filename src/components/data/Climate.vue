@@ -4,22 +4,22 @@
       <Line :data="chartData" :options="chartOptions" />
     </Card>
     <Card title="Soil Conditions" :icon="Leaf" :subtitle="'Current status of soil parameters'">
-      <div class="soil-conditions">
+      <div class="environmental-conditions">
         <ProgressBar label="Humidity" :value="currentClimateData.humidity" unit="%" />
         <ProgressBar label="Rainfall" :value="currentClimateData.rainfall" unit="mm" :max="50" />
         <ProgressBar label="pH Level" :value="currentClimateData.soilPH" :max="14" />
       </div>
-      <div class="stats">
+      <div class="environmental-stats">
         <StatCard
           title="Temperature"
           :value="currentClimateData.temperature"
-          :icon="'globe'"
+          :icon="Globe"
           color="lightblue"
         />
         <StatCard
           title="Humidity"
           :value="currentClimateData.humidity"
-          :icon="'globe'"
+          :icon="Globe"
           color="lightgreen"
         />
       </div>
@@ -54,10 +54,8 @@ const props = defineProps({
   },
 })
 
-// Computed chart data that uses the dataset when available
 const chartData = computed(() => {
   if (!props.dataset || !Array.isArray(props.dataset) || props.dataset.length === 0) {
-    // Default data when no dataset is provided
     return {
       labels: ['January', 'February', 'March', 'April', 'May'],
       datasets: [
@@ -79,7 +77,6 @@ const chartData = computed(() => {
     }
   }
 
-  // Use actual dataset data
   const labels = props.dataset.map((item, index) => `Day ${index + 1}`)
   const temperatures = props.dataset.map((item) => Math.round(item.temperature * 10) / 10)
   const humidity = props.dataset.map((item) => Math.round(item.humidity * 10) / 10)
@@ -105,7 +102,6 @@ const chartData = computed(() => {
   }
 })
 
-// Computed values for current climate data
 const currentClimateData = computed(() => {
   if (!props.dataset || !Array.isArray(props.dataset) || props.dataset.length === 0) {
     return {
@@ -121,8 +117,8 @@ const currentClimateData = computed(() => {
   return {
     temperature: Math.round(latest.temperature * 10) / 10,
     humidity: Math.round(latest.humidity),
-    soilTemperature: Math.round((latest.temperature - 2) * 10) / 10, // Soil temp is typically lower
-    soilPH: 6.5, // Default value as not in dataset
+    soilTemperature: Math.round((latest.temperature - 2) * 10) / 10,
+    soilPH: 6.5,
     rainfall: latest.rainfall,
   }
 })
@@ -147,7 +143,7 @@ const chartOptions = {
 </script>
 
 <style lang="scss" scoped>
-.soil-conditions {
+.environmental-conditions {
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
@@ -155,7 +151,7 @@ const chartOptions = {
   background-color: $card-background;
 }
 
-.stats {
+.environmental-stats {
   width: 100%;
   display: flex;
   justify-content: space-between;

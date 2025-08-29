@@ -1,7 +1,7 @@
 <template>
-  <div class="card">
-    <div class="title-container">
-      <component :is="icon" class="icon" v-if="icon" />
+  <div class="content-panel">
+    <div class="panel-header">
+      <component :is="icon" class="header-icon" v-if="icon" />
       <h2>{{ title }}</h2>
     </div>
     <p>{{ subtitle }}</p>
@@ -20,7 +20,7 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-.card {
+.content-panel {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -30,12 +30,12 @@ const props = defineProps({
   border: 1px solid $card-border;
   border-radius: $border-radius-md;
 
-  .title-container {
+  .panel-header {
     display: flex;
     align-items: center;
     gap: $spacing-xs;
 
-    .icon {
+    .header-icon {
       width: 24px;
       height: 24px;
       color: $primary;

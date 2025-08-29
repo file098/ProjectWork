@@ -1,28 +1,28 @@
 <template>
-  <div class="switcher">
+  <div class="view-switcher">
     <div
-      class="option"
+      class="tab-option"
       :class="{ active: modelValue === 'Environmental Data' }"
       @click="switchOption('Environmental Data')"
     >
-      <span class="full-text">Environmental Data</span>
-      <span class="short-text">Env.</span>
+      <span class="complete-text">Environmental Data</span>
+      <span class="abbreviated-text">Env.</span>
     </div>
     <div
-      class="option"
+      class="tab-option"
       :class="{ active: modelValue === 'Production' }"
       @click="switchOption('Production')"
     >
-      <span class="full-text">Production</span>
-      <span class="short-text">Prod.</span>
+      <span class="complete-text">Production</span>
+      <span class="abbreviated-text">Prod.</span>
     </div>
     <div
-      class="option"
+      class="tab-option"
       :class="{ active: modelValue === 'Financial Performance' }"
       @click="switchOption('Financial Performance')"
     >
-      <span class="full-text">Financial Performance</span>
-      <span class="short-text">Finance</span>
+      <span class="complete-text">Financial Performance</span>
+      <span class="abbreviated-text">Finance</span>
     </div>
   </div>
 </template>
@@ -39,17 +39,17 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-const activeOption = computed(() => props.modelValue)
+const currentTab = computed(() => props.modelValue)
 
-function switchOption(option) {
-  if (option !== props.modelValue) {
-    emit('update:modelValue', option)
+function switchOption(selectedOption) {
+  if (selectedOption !== props.modelValue) {
+    emit('update:modelValue', selectedOption)
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.switcher {
+.view-switcher {
   display: flex;
   justify-content: space-between;
   background-color: #f0f0f0;
@@ -57,7 +57,7 @@ function switchOption(option) {
   padding: 4px;
   gap: 4px;
 
-  .option {
+  .tab-option {
     flex: 1;
     text-align: center;
     padding: 12px 8px;
@@ -68,16 +68,16 @@ function switchOption(option) {
     transition: all 0.2s ease;
     user-select: none;
     font-size: 0.9rem;
-    min-height: 44px; // Touch target size
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
 
-    .short-text {
+    .abbreviated-text {
       display: none;
     }
 
-    .full-text {
+    .complete-text {
       display: block;
     }
 
@@ -98,19 +98,19 @@ function switchOption(option) {
 }
 
 @media (max-width: 768px) {
-  .switcher {
+  .view-switcher {
     gap: 2px;
     padding: 2px;
 
-    .option {
+    .tab-option {
       padding: 10px 4px;
       font-size: 0.8rem;
 
-      .full-text {
+      .complete-text {
         display: none;
       }
 
-      .short-text {
+      .abbreviated-text {
         display: block;
       }
     }
@@ -118,8 +118,8 @@ function switchOption(option) {
 }
 
 @media (max-width: 480px) {
-  .switcher {
-    .option {
+  .view-switcher {
+    .tab-option {
       font-size: 0.75rem;
       padding: 8px 2px;
     }

@@ -1,14 +1,13 @@
 <template>
-  <div class="stat-card" :style="{ '--card-color': color }">
-    <component :is="iconComponent" class="icon" v-if="icon" />
-    <span class="stat-title">{{ title }}</span>
-    <span class="stat-value">{{ value }}</span>
+  <div class="data-card" :style="{ '--card-color': color }">
+    <component :is="icon" class="data-icon" v-if="icon" />
+    <span class="data-title">{{ title }}</span>
+    <span class="data-reading">{{ value }}</span>
   </div>
 </template>
 
 <script setup>
-import { Globe, Leaf } from '@iconoir/vue'
-import { computed } from 'vue'
+import { defineProps } from 'vue'
 
 const props = defineProps({
   title: {
@@ -19,27 +18,16 @@ const props = defineProps({
     type: [String, Number],
     required: true,
   },
-  icon: {
-    type: String,
-    validator: (value) => ['globe', 'leaf'].includes(value),
-  },
+  icon: [String, Object],
   color: {
     type: String,
     default: 'red',
   },
 })
-
-const iconComponent = computed(() => {
-  const iconMap = {
-    globe: Globe,
-    leaf: Leaf,
-  }
-  return iconMap[props.icon]
-})
 </script>
 
 <style lang="scss" scoped>
-.stat-card {
+.data-card {
   background-color: var(--card-color, #f0f0f0);
   display: flex;
   flex-direction: column;
@@ -50,12 +38,12 @@ const iconComponent = computed(() => {
   padding: 1rem;
   border-radius: $border-radius-md;
 
-  & .stat-title {
+  & .data-title {
     font-size: 1rem;
     font-weight: bold;
   }
 
-  & .stat-value {
+  & .data-reading {
     font-size: 1.5rem;
     font-weight: 600;
   }

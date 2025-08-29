@@ -1,11 +1,11 @@
 <template>
-  <div class="small-card">
-    <div class="small-card-header">
-      <p class="title">{{ title }}</p>
-      <component :is="icon" class="icon" v-if="icon" />
+  <div class="metric-card">
+    <div class="metric-header">
+      <p class="metric-name">{{ title }}</p>
+      <component :is="icon" class="metric-icon" v-if="icon" />
     </div>
-    <div class="small-card-content">
-      <p class="value">{{ value }} {{ unit }}</p>
+    <div class="metric-data">
+      <p class="metric-reading">{{ value }} {{ unit }}</p>
       <Badge :state="state" />
     </div>
   </div>
@@ -32,7 +32,7 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-.small-card {
+.metric-card {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -45,7 +45,7 @@ const props = defineProps({
 
   box-sizing: border-box;
 
-  & .small-card-header {
+  & .metric-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -57,19 +57,19 @@ const props = defineProps({
       font-size: small;
     }
 
-    .icon {
+    .metric-icon {
       width: 20px;
       height: 20px;
       color: $primary;
     }
   }
 
-  & .small-card-content {
+  & .metric-data {
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;
 
-    .value {
+    .metric-reading {
       font-size: large;
       margin: 0;
       font-weight: bold;

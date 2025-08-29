@@ -30,7 +30,6 @@ const computedValue = computed(() => {
 })
 
 const computedState = computed(() => {
-  // Map legacy states to new good/average/bad states
   const stateMapping = {
     success: 'good',
     warning: 'average',
