@@ -2,7 +2,7 @@
   <div class="content">
     <Card
       title="Financial Performance"
-      icon="💰"
+      :icon="MoneySquare"
       :subtitle="'Revenue, costs, and profitability analysis'"
     >
       <div class="financial-overview">
@@ -53,7 +53,7 @@
       </div>
     </Card>
 
-    <Card title="Financial Trends" icon="📈" :subtitle="'Revenue and cost analysis over time'">
+    <Card title="Financial Trends" :icon="StatUp" :subtitle="'Revenue and cost analysis over time'">
       <div class="visualization-controls">
         <div class="chart-selection-buttons">
           <Button
@@ -63,7 +63,7 @@
             size="small"
             @click="activeChartType = chartType.value"
           >
-            {{ chartType.icon }} {{ chartType.label }}
+            {{ chartType.label }}
           </Button>
         </div>
       </div>
@@ -80,7 +80,7 @@
 <script setup>
 import { Card, ProgressBar, Button } from '@/components/ui'
 import StatCard from '@/components/ui/StatCard.vue'
-import { Euro, StatDown, StatUp } from '@iconoir/vue'
+import { Euro, StatDown, StatUp, MoneySquare } from '@iconoir/vue'
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -121,9 +121,9 @@ const props = defineProps({
 const activeChartType = ref('line')
 
 const visualizationTypes = [
-  { value: 'line', label: 'Line', icon: '📈' },
-  { value: 'bar', label: 'Bar', icon: '📊' },
-  { value: 'area', label: 'Area', icon: '📉' },
+  { value: 'line', label: 'Line' },
+  { value: 'bar', label: 'Bar' },
+  { value: 'area', label: 'Area' },
 ]
 
 const currentVisualization = computed(() => {
