@@ -27,7 +27,7 @@ import Performance from '@/components/data/Performance.vue'
 import Production from '@/components/data/Production.vue'
 import { SmallCard, Switcher } from '@/components/ui'
 import { useEngine } from '@/composables/useEngine'
-import { GraphUp, Globe } from '@iconoir/vue'
+import { GraphUp, Globe, TemperatureHigh, Consumable } from '@iconoir/vue'
 import { computed, ref } from 'vue'
 
 const currentView = ref('Environmental Data')
@@ -47,14 +47,14 @@ const dashboardMetrics = computed(() => {
   return [
     {
       title: 'Latest Temperature',
-      icon: GraphUp,
+      icon: TemperatureHigh,
       value: data?.temperature?.toFixed() || '0',
       unit: '°C',
       state: evaluateTemperatureStatus(data?.temperature || 0),
     },
     {
       title: 'Latest Harvest Quantity',
-      icon: GraphUp,
+      icon: Consumable,
       value: data?.harvestQuantity?.toFixed() || '0',
       unit: 'kg',
       state: evaluateHarvestStatus(data?.harvestQuantity || 0),

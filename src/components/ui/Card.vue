@@ -52,5 +52,9 @@ const props = defineProps({
     color: $text-secondary-color;
     font-size: 0.875rem;
   }
+
+  @include responsive(mobile) {
+    width: auto;
+  }
 }
 </style>

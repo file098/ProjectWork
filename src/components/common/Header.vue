@@ -6,7 +6,9 @@
     </div>
     <div class="header-actions">
       <Select v-model="timeframe" :options="timeframeOptions" name="period" id="period-select" />
-      <Button @click="initiateSimulation">Start Simulation</Button>
+      <Button @click="initiateSimulation" aria-label="Start simulation for the selected time period"
+        >Start Simulation</Button
+      >
     </div>
   </header>
 </template>

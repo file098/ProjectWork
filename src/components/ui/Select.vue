@@ -1,6 +1,6 @@
 <template>
   <div class="select-wrapper">
-    <select :id="id" :name="name" v-model="modelValue" class="custom-select">
+    <select :id="id" :name="name" v-model="modelValue" class="custom-select" :aria-label="name">
       <template v-if="options && options.length">
         <option
           v-for="option in options"
