@@ -1,5 +1,12 @@
 <template>
-  <Header @start-simulation="handleStartSimulation" />
+  <Header
+    :engine="dataEngine"
+    :has-data="simulationData.length > 0"
+    @start-simulation="handleStartSimulation"
+    @stop-simulation="handleStopSimulation"
+    @export-json="exportDataAsJson"
+    @export-csv="exportDataAsCsv"
+  />
 
   <section>
     <div class="metrics-grid">
@@ -13,6 +20,7 @@
         :state="metric.state"
       />
     </div>
+
     <Switcher v-model="currentView" />
     <KeepAlive>
       <component :is="selectedComponent" :dataset="simulationData" />
@@ -25,14 +33,16 @@ import Header from '@/components/common/Header.vue'
 import Climate from '@/components/data/Climate.vue'
 import Performance from '@/components/data/Performance.vue'
 import Production from '@/components/data/Production.vue'
-import { SmallCard, Switcher } from '@/components/ui'
+import { SmallCard, Switcher, Button } from '@/components/ui'
 import { useEngine } from '@/composables/useEngine'
 import { GraphUp, Globe, TemperatureHigh, Consumable } from '@iconoir/vue'
-import { computed, ref } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 
 const currentView = ref('Environmental Data')
 const dataEngine = useEngine()
 const simulationData = ref([])
+const fileInput = ref(null)
+let simulationInterval = null
 
 const latestMetrics = computed(() => {
   if (!simulationData.value || simulationData.value.length === 0) {
@@ -114,15 +124,95 @@ const selectedComponent = computed(() => {
 })
 
 const handleStartSimulation = (timespan) => {
-  simulationData.value = dataEngine.createDataset(timespan)
-  let currentPeriod = timespan
+  if (dataEngine.running.value) {
+    return // Prevent multiple simulations
+  }
 
-  setInterval(() => {
+  dataEngine.running.value = true
+  simulationData.value = dataEngine.createDataset(parseInt(timespan))
+
+  // Clear any existing interval
+  if (simulationInterval) {
+    clearInterval(simulationInterval)
+  }
+
+  simulationInterval = setInterval(() => {
     const freshData = dataEngine.createSingleDayDataset()
     simulationData.value.push(...freshData)
     simulationData.value.shift()
-    currentPeriod++
   }, 3000)
+}
+
+const handleStopSimulation = () => {
+  if (simulationInterval) {
+    clearInterval(simulationInterval)
+    simulationInterval = null
+  }
+  dataEngine.running.value = false
+}
+
+// Watch for timeframe changes and restart simulation smoothly
+watch(
+  () => dataEngine.timeframe.value,
+  (newTimeframe, oldTimeframe) => {
+    if (dataEngine.running.value && newTimeframe !== oldTimeframe) {
+      console.log(
+        `Timeframe changed from ${oldTimeframe} to ${newTimeframe} days. Restarting simulation...`,
+      )
+
+      // Smoothly restart the simulation
+      handleStopSimulation()
+      setTimeout(() => {
+        handleStartSimulation(newTimeframe)
+      }, 50) // Small delay for smooth transition
+    }
+  },
+)
+
+// Auto-save data whenever it changes
+watch(
+  simulationData,
+  (newData) => {
+    if (newData.length > 0) {
+      // Data changed - could implement auto-save here if needed
+      console.log(`Simulation data updated: ${newData.length} records`)
+    }
+  },
+  { deep: true },
+)
+
+// Load saved data on component mount
+onMounted(() => {
+  // Could implement data loading from localStorage here if needed
+  console.log('Dashboard component mounted')
+})
+
+// Cleanup interval on component unmount
+onUnmounted(() => {
+  handleStopSimulation()
+})
+
+// Data export/import functions
+const exportDataAsJson = () => {
+  if (simulationData.value.length === 0) {
+    alert('No data to export. Please start a simulation first.')
+    return
+  }
+
+  const timestamp = new Date().toISOString().split('T')[0]
+  const filename = `farm-data-${timestamp}.json`
+  dataEngine.exportDataToFile(simulationData.value, filename)
+}
+
+const exportDataAsCsv = () => {
+  if (simulationData.value.length === 0) {
+    alert('No data to export. Please start a simulation first.')
+    return
+  }
+
+  const timestamp = new Date().toISOString().split('T')[0]
+  const filename = `farm-data-${timestamp}.csv`
+  dataEngine.exportDataToCsv(simulationData.value, filename)
 }
 </script>
 

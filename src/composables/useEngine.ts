@@ -1,6 +1,9 @@
 import { FarmDataset, FarmData, Season, CropType } from '@/components/utils/data.model'
+import { ref } from 'vue'
 
 export function useEngine() {
+  const running = ref(false)
+  const timeframe = ref('7')
   const createWeatherData = (season: Season) => {
     const seasonalTemps = {
       [Season.WINTER]: 5,
@@ -150,7 +153,46 @@ export function useEngine() {
     return [dailyData]
   }
 
+  const exportDataToFile = (dataset: FarmDataset, filename: string = 'farm-data-export.json') => {
+    const dataStr = JSON.stringify(dataset, null, 2)
+    const dataBlob = new Blob([dataStr], { type: 'application/json' })
+
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(dataBlob)
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(link.href)
+  }
+
+  const exportDataToCsv = (dataset: FarmDataset, filename: string = 'farm-data-export.csv') => {
+    if (dataset.length === 0) return
+
+    const headers = Object.keys(dataset[0]).join(',')
+    const csvContent = dataset
+      .map((row) =>
+        Object.values(row)
+          .map((value) => (typeof value === 'string' && value.includes(',') ? `"${value}"` : value))
+          .join(','),
+      )
+      .join('\n')
+
+    const fullCsvContent = headers + '\n' + csvContent
+    const csvBlob = new Blob([fullCsvContent], { type: 'text/csv' })
+
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(csvBlob)
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(link.href)
+  }
+
   return {
+    running,
+    timeframe,
     buildCompleteRecord,
     createDataset,
     createSingleDayDataset,
@@ -159,5 +201,7 @@ export function useEngine() {
     calculateFinancials,
     getResourceUsage,
     computeKPIs,
+    exportDataToFile,
+    exportDataToCsv,
   }
 }
