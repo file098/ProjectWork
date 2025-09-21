@@ -125,13 +125,12 @@ const selectedComponent = computed(() => {
 
 const handleStartSimulation = (timespan) => {
   if (dataEngine.running.value) {
-    return // Prevent multiple simulations
+    return
   }
 
   dataEngine.running.value = true
   simulationData.value = dataEngine.createDataset(parseInt(timespan))
 
-  // Clear any existing interval
   if (simulationInterval) {
     clearInterval(simulationInterval)
   }
@@ -151,7 +150,6 @@ const handleStopSimulation = () => {
   dataEngine.running.value = false
 }
 
-// Watch for timeframe changes and restart simulation smoothly
 watch(
   () => dataEngine.timeframe.value,
   (newTimeframe, oldTimeframe) => {
@@ -160,39 +158,32 @@ watch(
         `Timeframe changed from ${oldTimeframe} to ${newTimeframe} days. Restarting simulation...`,
       )
 
-      // Smoothly restart the simulation
       handleStopSimulation()
       setTimeout(() => {
         handleStartSimulation(newTimeframe)
-      }, 50) // Small delay for smooth transition
+      }, 50)  
     }
   },
 )
 
-// Auto-save data whenever it changes
 watch(
   simulationData,
   (newData) => {
     if (newData.length > 0) {
-      // Data changed - could implement auto-save here if needed
       console.log(`Simulation data updated: ${newData.length} records`)
     }
   },
   { deep: true },
 )
 
-// Load saved data on component mount
 onMounted(() => {
-  // Could implement data loading from localStorage here if needed
   console.log('Dashboard component mounted')
 })
 
-// Cleanup interval on component unmount
 onUnmounted(() => {
   handleStopSimulation()
 })
 
-// Data export/import functions
 const exportDataAsJson = () => {
   if (simulationData.value.length === 0) {
     alert('No data to export. Please start a simulation first.')

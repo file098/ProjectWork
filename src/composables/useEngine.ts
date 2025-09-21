@@ -43,13 +43,52 @@ export function useEngine() {
     }
   }
 
-  const calculateFinancials = (production: number, area: number) => {
-    const costPerHectare = 800 + Math.random() * 400
-    const sellingPrice = 0.3 + Math.random() * 0.4
+  const calculateFinancials = (
+    production: number,
+    area: number,
+    cropType: CropType,
+    season: Season,
+    quality: number,
+  ) => {
+    // Base costs per hectare by crop type (in USD)
+    const baseCostsPerHectare = {
+      [CropType.CEREALS]: 1200, // Seeds, fertilizer, machinery
+      [CropType.VEGETABLES]: 2800, // Higher labor, irrigation, protection
+      [CropType.FRUITS]: 3500, // Tree maintenance, specialized equipment
+    }
 
-    const totalCosts = costPerHectare * area
-    const totalRevenue = production * sellingPrice
-    const profitMargin = ((totalRevenue - totalCosts) / totalRevenue) * 100
+    // Market prices per kg/ton by crop type (in USD)
+    const marketPrices = {
+      [CropType.CEREALS]: 0.45, // ~$450/ton for wheat/corn
+      [CropType.VEGETABLES]: 1.8, // ~$1800/ton for mixed vegetables
+      [CropType.FRUITS]: 2.2, // ~$2200/ton for fruits
+    }
+
+    // Seasonal price multipliers (supply/demand fluctuations)
+    const seasonalMultipliers = {
+      [Season.SPRING]: 1.15, // Higher prices, lower supply
+      [Season.SUMMER]: 0.9, // Peak harvest, lower prices
+      [Season.AUTUMN]: 1.05, // Good harvest season
+      [Season.WINTER]: 1.25, // Limited supply, higher prices
+    }
+
+    // Quality multiplier affects selling price (4-10 scale)
+    const qualityMultiplier = 0.7 + (quality - 4) * 0.05 // Range: 0.7 to 1.0
+
+    // Calculate variable costs (10-25% variation)
+    const costVariation = 0.85 + Math.random() * 0.3
+    const baseCost = baseCostsPerHectare[cropType]
+    const totalCosts = baseCost * area * costVariation
+
+    // Calculate revenue with market dynamics
+    const basePrice = marketPrices[cropType]
+    const seasonalPrice = basePrice * seasonalMultipliers[season]
+    const finalPrice = seasonalPrice * qualityMultiplier
+    const totalRevenue = production * finalPrice
+
+    // Calculate profit margin
+    const profit = totalRevenue - totalCosts
+    const profitMargin = totalRevenue > 0 ? (profit / totalRevenue) * 100 : -100
 
     return {
       productionCosts: Math.round(totalCosts),
@@ -97,6 +136,9 @@ export function useEngine() {
     const financialData = calculateFinancials(
       productionData.harvestQuantity,
       productionData.cultivatedArea,
+      cropType,
+      season,
+      productionData.productQuality,
     )
     const resourceData = getResourceUsage(productionData.cultivatedArea)
     const performanceData = computeKPIs(
